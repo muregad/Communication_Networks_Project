@@ -1,20 +1,18 @@
 package MileStone1;
 
-import java.io.*;
 import java.net.*; 
+import java.io.*; 
   
 public class TCPServer { 
-    
+    //initialize socket and input stream 
     private Socket          socket   = null; 
     private ServerSocket    server   = null; 
     private DataInputStream in       =  null; 
-    private DataInputStream inConsole       =  null; 
-    private DataOutputStream out     = null; 
   
-     
+    // constructor with port 
     public TCPServer(int port) 
     { 
-        
+        // starts server and waits for a connection 
         try
         { 
             server = new ServerSocket(port); 
@@ -25,31 +23,20 @@ public class TCPServer {
             socket = server.accept(); 
             System.out.println("Client accepted"); 
   
-            
-            in = new DataInputStream(new BufferedInputStream(socket.getInputStream())); 
-            inConsole = new DataInputStream(new BufferedInputStream(System.in));
-            out = new DataOutputStream(socket.getOutputStream()); 
-            
-            String line1 = "" , line2 = ""; 
+            // takes input from the client socket 
+            in = new DataInputStream( 
+                new BufferedInputStream(socket.getInputStream())); 
   
-            
-            while (!(line1.equals("Over") || line2.equals("over"))) 
+            String line = ""; 
+  
+            // reads message from client until "Over" is sent 
+            while (!line.equals("Over")) 
             { 
                 try
                 { 
-                    line1 = in.readUTF(); 
-                    System.out.println(line1); 
+                    line = in.readUTF().toUpperCase(); 
+                    System.out.println(line); 
   
-                } 
-                catch(IOException i) 
-                { 
-                    System.out.println(i); 
-                } 
-                
-                try
-                { 
-                    line2 = inConsole.readLine(); 
-                    out.writeUTF(line2);
                 } 
                 catch(IOException i) 
                 { 
@@ -58,11 +45,9 @@ public class TCPServer {
             } 
             System.out.println("Closing connection"); 
   
-            
+            // close connection 
             socket.close(); 
             in.close(); 
-            out.close(); 
-            inConsole.close();
         } 
         catch(IOException i) 
         { 

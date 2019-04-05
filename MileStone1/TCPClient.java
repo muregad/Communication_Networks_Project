@@ -3,11 +3,13 @@ package MileStone1;
 import java.net.*; 
 import java.io.*; 
   
+import java.net.*; 
+import java.io.*; 
+  
 public class TCPClient { 
     // initialize socket and input output streams 
     private Socket socket            = null; 
     private DataInputStream  input   = null; 
-    private DataInputStream  inputٍServer   = null;
     private DataOutputStream out     = null; 
   
     // constructor to put ip address and port 
@@ -16,18 +18,14 @@ public class TCPClient {
         // establish a connection 
         try
         { 
-        	
-        	 // takes input from terminal 
-            input  = new DataInputStream(System.in); 
-            
-            while(!input.readLine().equals("Connect"));
-            
             socket = new Socket(address, port); 
             System.out.println("Connected"); 
   
+            // takes input from terminal 
+            input  = new DataInputStream(System.in); 
+  
             // sends output to the socket 
-            out = new DataOutputStream(socket.getOutputStream()); 
-            inputٍServer = new DataInputStream(socket.getInputStream());
+            out    = new DataOutputStream(socket.getOutputStream()); 
         } 
         catch(UnknownHostException u) 
         { 
@@ -39,25 +37,15 @@ public class TCPClient {
         } 
   
         // string to read message from input 
-        String line1 = "" , line2 = ""; 
+        String line = ""; 
   
         // keep reading until "Over" is input 
-        while (!(line1.equals("Over") || line2.equals("Over"))) 
+        while (!line.equals("Over")) 
         { 
             try
             { 
-                line1 = input.readLine(); 
-                out.writeUTF(line1); 
-            } 
-            catch(IOException i) 
-            { 
-                System.out.println(i); 
-            } 
-            
-            try
-            { 
-                line2 = inputٍServer.readUTF(); 
-                System.out.println(line2); 
+                line = input.readLine(); 
+                out.writeUTF(line); 
             } 
             catch(IOException i) 
             { 
@@ -69,7 +57,6 @@ public class TCPClient {
         try
         { 
             input.close(); 
-            inputٍServer.close();
             out.close(); 
             socket.close(); 
         } 
