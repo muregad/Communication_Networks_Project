@@ -1,62 +1,58 @@
 package MileStone1;
 
-import java.net.*; 
-import java.io.*; 
-  
-public class TCPServer { 
-    //initialize socket and input stream 
-    private Socket          socket   = null; 
-    private ServerSocket    server   = null; 
-    private DataInputStream in       =  null; 
-  
-    // constructor with port 
-    public TCPServer(int port) 
-    { 
-        // starts server and waits for a connection 
-        try
-        { 
-            server = new ServerSocket(port); 
-            System.out.println("Server started"); 
-  
-            System.out.println("Waiting for a client ..."); 
-  
-            socket = server.accept(); 
-            System.out.println("Client accepted"); 
-  
-            // takes input from the client socket 
-            in = new DataInputStream( 
-                new BufferedInputStream(socket.getInputStream())); 
-  
-            String line = ""; 
-  
-            // reads message from client until "Over" is sent 
-            while (!line.equals("Over")) 
-            { 
-                try
-                { 
-                    line = in.readUTF().toUpperCase(); 
-                    System.out.println(line); 
-  
-                } 
-                catch(IOException i) 
-                { 
-                    System.out.println(i); 
-                } 
-            } 
-            System.out.println("Closing connection"); 
-  
-            // close connection 
-            socket.close(); 
-            in.close(); 
-        } 
-        catch(IOException i) 
-        { 
-            System.out.println(i); 
-        } 
-    } 
-  
-    public static void main(String args[]) 
-    { 
-        TCPServer server = new TCPServer(5000); 
-    } 
-} 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class TCPServer {
+	
+	DataOutputStream doc;
+	BufferedReader inClient;
+	Socket socket;
+	ServerSocket welcomeSocket;
+	BufferedReader inConsole;
+	public TCPServer(int port) throws IOException {
+		try {
+			welcomeSocket =new ServerSocket(port);
+			System.out.println("Initilized....."+"\n"+"Waiting for a client");
+			socket= welcomeSocket.accept();
+			System.out.println("Connected");
+			doc =new DataOutputStream(socket.getOutputStream());
+			inClient=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			//inConsole= new BufferedReader(new InputStreamReader(System.in));
+			
+			String sentence="";
+			String clientSentence="";
+			while (!sentence.equals("over")) {
+				
+				if (inClient.ready()) {
+					clientSentence=inClient.readLine();
+					doc.writeBytes(clientSentence.toUpperCase() +"\n");
+				}
+					
+			}
+		}
+		catch(IOException e1) {
+			System.out.println(e1.getMessage());
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			welcomeSocket.close();
+			socket.close();
+		}
+		
+	}
+
+	public static void main(String[] args) throws IOException{
+		
+		TCPServer server=new TCPServer(5000);
+		
+
+	}
+
+}
