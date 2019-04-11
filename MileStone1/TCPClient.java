@@ -19,18 +19,18 @@ public TCPClient(String ip,int port) {
 		inServer =new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		String sentence ="";
 		String serverSentence="";
-		while (!(sentence.equals("over"))) {
-			if (inConsole.ready()) {
-				sentence=inConsole.readLine();
-				dos.writeBytes(sentence +"\n");
-			}
-			if (inServer.ready()) {
-				serverSentence=inServer.readLine();
-				System.out.println("FROM SERVER : " + serverSentence);
-			}
-				
+		
+			
+		sentence=inConsole.readLine();
+		dos.writeBytes(sentence +"\n");
+	
+	
+		serverSentence=inServer.readLine();
+		System.out.println("FROM SERVER : " + serverSentence);
+	
+			
 		}
-	}
+	
 	catch(Exception e) {
 		System.out.println(e.getMessage());
 	}

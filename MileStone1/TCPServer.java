@@ -26,14 +26,14 @@ public class TCPServer {
 			
 			String sentence="";
 			String clientSentence="";
-			while (!sentence.equals("over")) {
+			
 				
-				if (inClient.ready()) {
-					clientSentence=inClient.readLine();
-					doc.writeBytes(clientSentence.toUpperCase() +"\n");
-				}
+				
+			clientSentence=inClient.readLine();
+			doc.writeBytes(clientSentence.toUpperCase() +"\n");
+				
 					
-			}
+			
 		}
 		catch(IOException e1) {
 			System.out.println(e1.getMessage());
